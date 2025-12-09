@@ -28,16 +28,12 @@ export const useAIConversation = () => {
   const [error, setError] = useState<string | null>(null);
   const [dailyCount, setDailyCount] = useState(0);
 
-  // Debug: Log error state changes
+  // Debug: Log error state changes (only for significant errors)
   useEffect(() => {
-    if (error) {
-      console.log('[useAIConversation] ⚠️ Error state set:', error);
-      console.log('[useAIConversation] 📅 Current date:', new Date().toISOString());
-      console.log('[useAIConversation] 👤 User ID:', user?.id);
-    } else {
-      console.log('[useAIConversation] ✅ Error state cleared');
+    if (error && !error.includes('does not exist')) {
+      console.warn('[useAIConversation] Error:', error);
     }
-  }, [error, user]);
+  }, [error]);
 
   // Check daily limit status directly from database
   const checkDailyLimitStatus = async (): Promise<boolean> => {
@@ -56,7 +52,11 @@ export const useAIConversation = () => {
         .maybeSingle();
 
       if (queryError) {
-        console.error('[useAIConversation] ❌ Error checking daily limit:', queryError);
+        // Silenciar erro de tabela inexistente
+        if (queryError.message?.includes('does not exist')) {
+          return false;
+        }
+        console.warn('[useAIConversation] Error checking daily limit:', queryError.message);
         return false;
       }
 
@@ -78,7 +78,7 @@ export const useAIConversation = () => {
 
       return limitReached;
     } catch (err) {
-      console.error('[useAIConversation] ❌ Exception checking daily limit:', err);
+      // Silenciar erros - feature pode não estar disponível
       return false;
     }
   };
@@ -94,12 +94,20 @@ export const useAIConversation = () => {
         .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        // Silenciar erro de tabela inexistente
+        if (!error.message?.includes('does not exist')) {
+          console.warn('[useAIConversation] Error loading conversations:', error.message);
+        }
+        return;
+      }
 
       setConversations(data || []);
-    } catch (err) {
-      console.error('Error loading conversations:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load conversations');
+    } catch (err: any) {
+      // Silenciar erros de tabela inexistente
+      if (!err?.message?.includes('does not exist')) {
+        console.warn('[useAIConversation] Error:', err?.message);
+      }
     }
   };
 
@@ -114,7 +122,13 @@ export const useAIConversation = () => {
         .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        // Silenciar erro de tabela inexistente
+        if (!error.message?.includes('does not exist')) {
+          console.warn('[useAIConversation] Error loading messages:', error.message);
+        }
+        return;
+      }
 
       const formattedMessages: AIMessage[] = (data || []).map(msg => ({
         id: msg.id,
@@ -125,9 +139,11 @@ export const useAIConversation = () => {
       }));
 
       setMessages(formattedMessages);
-    } catch (err) {
-      console.error('Error loading messages:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load messages');
+    } catch (err: any) {
+      // Silenciar erros de tabela inexistente
+      if (!err?.message?.includes('does not exist')) {
+        console.warn('[useAIConversation] Error:', err?.message);
+      }
     }
   };
 

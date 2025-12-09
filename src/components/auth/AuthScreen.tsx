@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { signInUser, signUpUser, resetPasswordForEmail } from '@/lib/supabase';
 import { supabase } from '@/integrations/supabase/client';
-import { ShapeProLogo } from '@/components/ui/ShapeProLogo';
+import { PrassTrainerLogo } from '@/components/ui/PrassTrainerLogo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +33,7 @@ export const AuthScreen = () => {
   const { isNative } = useDeviceContext();
   const [searchParams] = useSearchParams();
 
-  // ✅ BUILD 36: Auto-focar no login se vier de confirmação de email
+  // âœ… BUILD 36: Auto-focar no login se vier de confirmaÃ§Ã£o de email
   useEffect(() => {
     const autoLogin = searchParams.get('autoLogin');
     const confirmed = searchParams.get('confirmed');
@@ -44,8 +44,8 @@ export const AuthScreen = () => {
       // Mostrar toast de sucesso
       if (confirmed === 'true') {
         toast({
-          title: "✅ Email confirmado com sucesso!",
-          description: "Faça login para acessar sua conta.",
+          title: "âœ… Email confirmado com sucesso!",
+          description: "FaÃ§a login para acessar sua conta.",
         });
       }
     }
@@ -65,7 +65,7 @@ export const AuthScreen = () => {
     e.preventDefault();
     setLoading(true);
 
-    // ✅ BUILD 40.2 FASE 4: Função de retry com backoff exponencial
+    // âœ… BUILD 40.2 FASE 4: FunÃ§Ã£o de retry com backoff exponencial
     const loginWithRetry = async (maxRetries = 2) => {
       for (let attempt = 0; attempt <= maxRetries; attempt++) {
         try {
@@ -74,7 +74,7 @@ export const AuthScreen = () => {
             const waitTime = Math.pow(2, attempt) * 1000;
 
             toast({
-              title: `🔄 Tentativa ${attempt + 1}/${maxRetries + 1}`,
+              title: `ðŸ”„ Tentativa ${attempt + 1}/${maxRetries + 1}`,
               description: `Aguardando ${waitTime / 1000}s antes de tentar novamente...`,
             });
 
@@ -93,58 +93,58 @@ export const AuthScreen = () => {
           return; // Sair do loop
 
         } catch (error: any) {
-          // Se for último retry, propagar erro
+          // Se for Ãºltimo retry, propagar erro
           if (attempt === maxRetries) {
             throw error;
           }
 
-          // Se não for erro de timeout, não fazer retry
+          // Se nÃ£o for erro de timeout, nÃ£o fazer retry
           if (!error.message.includes('timeout') &&
-            !error.message.includes('não está respondendo') &&
-            !error.message.includes('Problema de conexão')) {
+            !error.message.includes('nÃ£o estÃ¡ respondendo') &&
+            !error.message.includes('Problema de conexÃ£o')) {
             throw error;
           }
 
-          // Continuar para próximo retry
+          // Continuar para prÃ³ximo retry
           console.log(`[Login] Tentativa ${attempt + 1} falhou, tentando novamente...`);
         }
       }
     };
 
     try {
-      await loginWithRetry(2); // Até 3 tentativas (0, 1, 2)
+      await loginWithRetry(2); // AtÃ© 3 tentativas (0, 1, 2)
     } catch (error: any) {
-      // ✅ Detectar timeout do banco
+      // âœ… Detectar timeout do banco
       if (error.message.includes('timeout') ||
-        error.message.includes('não está respondendo') ||
-        error.message.includes('Problema de conexão')) {
+        error.message.includes('nÃ£o estÃ¡ respondendo') ||
+        error.message.includes('Problema de conexÃ£o')) {
         toast({
-          title: "⏱️ Servidor está demorando",
+          title: "â±ï¸ Servidor estÃ¡ demorando",
           description: "O banco de dados pode estar acordando. Aguarde 10 segundos e tente novamente.",
           variant: "destructive",
         });
         return;
       }
 
-      // ✅ Detectar erro de email não confirmado
-      if (error.message.includes('não confirmado')) {
+      // âœ… Detectar erro de email nÃ£o confirmado
+      if (error.message.includes('nÃ£o confirmado')) {
         toast({
-          title: "⚠️ Email não confirmado",
+          title: "âš ï¸ Email nÃ£o confirmado",
           description: "Verifique sua caixa de entrada antes de fazer login.",
           variant: "destructive",
         });
 
         setTimeout(() => {
           toast({
-            title: "💡 Dica",
-            description: "Não recebeu o email? Clique em 'Criar Conta' novamente para reenviar.",
+            title: "ðŸ’¡ Dica",
+            description: "NÃ£o recebeu o email? Clique em 'Criar Conta' novamente para reenviar.",
           });
         }, 2000);
 
         return;
       }
 
-      // Erro genérico
+      // Erro genÃ©rico
       toast({
         title: "Erro no login",
         description: error.message || "Verifique suas credenciais e tente novamente.",
@@ -158,11 +158,11 @@ export const AuthScreen = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar aceitação dos termos
+    // Validar aceitaÃ§Ã£o dos termos
     if (!termsAccepted) {
       toast({
-        title: "⚠️ Termos não aceitos",
-        description: "Você precisa aceitar os Termos de Uso e Política de Privacidade para continuar.",
+        title: "âš ï¸ Termos nÃ£o aceitos",
+        description: "VocÃª precisa aceitar os Termos de Uso e PolÃ­tica de Privacidade para continuar.",
         variant: "destructive",
       });
       return;
@@ -171,22 +171,22 @@ export const AuthScreen = () => {
     setLoading(true);
 
     try {
-      // FASE 1: Validação proativa - verificar se email já existe
+      // FASE 1: ValidaÃ§Ã£o proativa - verificar se email jÃ¡ existe
       const { exists, confirmed } = await checkEmailExistsFull(email);
 
       if (exists) {
         if (confirmed) {
-          // Email existe e está confirmado → redirecionar para login
+          // Email existe e estÃ¡ confirmado â†’ redirecionar para login
           toast({
-            title: "Email já cadastrado",
-            description: "Este email já possui uma conta. Faça login.",
+            title: "Email jÃ¡ cadastrado",
+            description: "Este email jÃ¡ possui uma conta. FaÃ§a login.",
             variant: "destructive",
           });
           setActiveTab('signin');
           setLoading(false);
           return;
         } else {
-          // Email existe mas não está confirmado → reenviar email
+          // Email existe mas nÃ£o estÃ¡ confirmado â†’ reenviar email
 
           const { detectOrigin, calculateRedirectUrl } = await import('@/utils/domainDetector');
           const meta = detectOrigin('student');
@@ -201,14 +201,14 @@ export const AuthScreen = () => {
           });
 
           if (error) {
-            // ✅ BUILD 35: Detectar erro de template
+            // âœ… BUILD 35: Detectar erro de template
             if (error.message?.includes('template') ||
               error.message?.includes('function') ||
               error.message?.includes('date') ||
               error.message?.includes('Error rendering email')) {
               toast({
-                title: "⚠️ Erro no servidor de email",
-                description: "Entre em contato com suporte. Erro técnico: template de email incorreto.",
+                title: "âš ï¸ Erro no servidor de email",
+                description: "Entre em contato com suporte. Erro tÃ©cnico: template de email incorreto.",
                 variant: "destructive",
               });
               setLoading(false);
@@ -216,13 +216,13 @@ export const AuthScreen = () => {
             }
 
             toast({
-              title: "Email já cadastrado",
-              description: "Complete a confirmação do email. Verifique sua caixa de entrada.",
+              title: "Email jÃ¡ cadastrado",
+              description: "Complete a confirmaÃ§Ã£o do email. Verifique sua caixa de entrada.",
               variant: "destructive",
             });
           } else {
             toast({
-              title: "Email de confirmação reenviado",
+              title: "Email de confirmaÃ§Ã£o reenviado",
               description: "Verifique sua caixa de entrada e spam.",
             });
           }
@@ -233,18 +233,18 @@ export const AuthScreen = () => {
         }
       }
 
-      // Email não existe → continuar com signup normal
+      // Email nÃ£o existe â†’ continuar com signup normal
       const result = await signUpUser(email, password, name, 'student', isNative);
 
       if (result?.session) {
         toast({
-          title: "✅ Conta criada!",
+          title: "âœ… Conta criada!",
           description: "Bem-vindo ao Prass Trainer!",
         });
         navigate('/', { replace: true });
       } else {
         toast({
-          title: "📧 Email de confirmação enviado!",
+          title: "ðŸ“§ Email de confirmaÃ§Ã£o enviado!",
           description: `Verifique sua caixa de entrada em ${email}`,
         });
         navigate(`/auth/verify?email=${encodeURIComponent(email)}`, { replace: true });
@@ -252,7 +252,7 @@ export const AuthScreen = () => {
     } catch (error: any) {
       toast({
         title: "Erro no cadastro",
-        description: error.message || "Não foi possível criar sua conta. Tente novamente.",
+        description: error.message || "NÃ£o foi possÃ­vel criar sua conta. Tente novamente.",
         variant: "destructive",
       });
     } finally {
@@ -287,7 +287,7 @@ export const AuthScreen = () => {
     }
   };
 
-  // Verificar se email existe e se está confirmado (para Fase 1)
+  // Verificar se email existe e se estÃ¡ confirmado (para Fase 1)
   const checkEmailExistsFull = async (email: string): Promise<{ exists: boolean; confirmed: boolean }> => {
     try {
       const { getSupabase } = await import('@/integrations/supabase/client');
@@ -302,13 +302,13 @@ export const AuthScreen = () => {
         return { exists: false, confirmed: false };
       }
 
-      // Tentar verificar se o usuário está confirmado
-      // Como não temos acesso direto ao auth.users, vamos tentar fazer login sem senha
-      // para verificar se o email está confirmado
+      // Tentar verificar se o usuÃ¡rio estÃ¡ confirmado
+      // Como nÃ£o temos acesso direto ao auth.users, vamos tentar fazer login sem senha
+      // para verificar se o email estÃ¡ confirmado
       const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
 
-      // Se não houver usuário logado, assumimos que existe mas não está confirmado
-      // (método alternativo já que não temos acesso direto ao auth.users)
+      // Se nÃ£o houver usuÃ¡rio logado, assumimos que existe mas nÃ£o estÃ¡ confirmado
+      // (mÃ©todo alternativo jÃ¡ que nÃ£o temos acesso direto ao auth.users)
       return { exists: true, confirmed: false };
     } catch (error) {
       return { exists: false, confirmed: false };
@@ -330,7 +330,7 @@ export const AuthScreen = () => {
 
         if (data && !error) {
           setEmailExistsStatus('exists');
-          setIsEmailConfirmed(true); // Assumir que está confirmado se existe no profiles
+          setIsEmailConfirmed(true); // Assumir que estÃ¡ confirmado se existe no profiles
         } else {
           setEmailExistsStatus('available');
           setIsEmailConfirmed(false);
@@ -348,8 +348,8 @@ export const AuthScreen = () => {
     // Verificar cooldown
     if (resetCooldown > 0) {
       toast({
-        title: "⏱️ Aguarde",
-        description: `Você poderá solicitar novamente em ${resetCooldown}s`,
+        title: "â±ï¸ Aguarde",
+        description: `VocÃª poderÃ¡ solicitar novamente em ${resetCooldown}s`,
         variant: "destructive",
       });
       return;
@@ -358,7 +358,7 @@ export const AuthScreen = () => {
     if (!email) {
       toast({
         title: "Informe seu email",
-        description: "Digite seu email para receber o link de recuperação.",
+        description: "Digite seu email para receber o link de recuperaÃ§Ã£o.",
         variant: "destructive",
       });
       return;
@@ -366,8 +366,8 @@ export const AuthScreen = () => {
 
     if (!email.includes('@') || email.length < 5) {
       toast({
-        title: "Email inválido",
-        description: "Digite um email válido para continuar.",
+        title: "Email invÃ¡lido",
+        description: "Digite um email vÃ¡lido para continuar.",
         variant: "destructive",
       });
       return;
@@ -381,8 +381,8 @@ export const AuthScreen = () => {
 
       if (emailExists === false) {
         toast({
-          title: "Email não encontrado",
-          description: "Este email não está cadastrado no sistema.",
+          title: "Email nÃ£o encontrado",
+          description: "Este email nÃ£o estÃ¡ cadastrado no sistema.",
           variant: "destructive",
         });
         return;
@@ -393,27 +393,27 @@ export const AuthScreen = () => {
 
       toast({
         title: "Email enviado com sucesso!",
-        description: "Verifique sua caixa de entrada e spam. O link é válido por 1 hora.",
+        description: "Verifique sua caixa de entrada e spam. O link Ã© vÃ¡lido por 1 hora.",
       });
 
-      // Opcional: Mostrar informações adicionais sobre onde verificar
+      // Opcional: Mostrar informaÃ§Ãµes adicionais sobre onde verificar
       setTimeout(() => {
         toast({
-          title: "💡 Dica importante",
-          description: "Se não receber o email, verifique a pasta de spam ou lixo eletrônico.",
+          title: "ðŸ’¡ Dica importante",
+          description: "Se nÃ£o receber o email, verifique a pasta de spam ou lixo eletrÃ´nico.",
         });
       }, 3000);
 
     } catch (error: any) {
-      // Mensagens de erro mais específicas
+      // Mensagens de erro mais especÃ­ficas
       let errorMessage = "Tente novamente mais tarde.";
 
       if (error.message?.includes('network')) {
-        errorMessage = "Verifique sua conexão com a internet.";
+        errorMessage = "Verifique sua conexÃ£o com a internet.";
       } else if (error.message?.includes('rate limit')) {
         errorMessage = "Muitas tentativas. Aguarde alguns minutos.";
       } else if (error.message?.includes('invalid')) {
-        errorMessage = "Email inválido ou não encontrado.";
+        errorMessage = "Email invÃ¡lido ou nÃ£o encontrado.";
       }
 
       toast({
@@ -436,13 +436,13 @@ export const AuthScreen = () => {
             alt="Prass Trainer - Transforme sua vida"
             className="h-32 w-auto mx-auto mb-4 rounded-2xl"
           />
-          <p className="text-muted-foreground">Transforme sua vida com muscula��o especializada</p>
+          <p className="text-muted-foreground">Transforme sua vida com musculacao especializada</p>
 
           {/* Health Disclaimer - Google Play Compliance */}
           <div className="mt-6 px-4 text-[10px] text-muted-foreground/40 text-center leading-tight">
             <p>
-              <strong>Aviso de Sa�de:</strong> Este aplicativo oferece sugest�es de exerc�cios e nutri��o para fins informativos.
-              Consulte um m�dico antes de iniciar qualquer programa.
+              <strong>Aviso de Saude:</strong> Este aplicativo oferece sugestões de exercícios e nutrição para fins informativos.
+              Consulte um medico antes de iniciar qualquer programa.
             </p>
           </div>
         </div>
@@ -468,7 +468,7 @@ export const AuthScreen = () => {
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha</Label>
                     <div className="relative">
-                      <Input id="password" type={showPassword ? "text" : "password"} placeholder="��������" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                      <Input id="password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required />
                       <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)}>
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
@@ -491,7 +491,7 @@ export const AuthScreen = () => {
             <Card className="bg-black/40 border-primary/20">
               <CardHeader>
                 <CardTitle>Criar Conta</CardTitle>
-                <CardDescription>Crie sua conta gratuita e comece sua transforma��o</CardDescription>
+                <CardDescription>Crie sua conta gratuita e comece sua transformação</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignUp} className="space-y-4">
@@ -513,14 +513,14 @@ export const AuthScreen = () => {
                     </div>
                     {emailExistsStatus === 'exists' && (
                       <p className="text-xs text-destructive mt-1 flex items-center gap-1">
-                        <XCircle className="h-3 w-3" />Email j� cadastrado.{' '}<button type="button" onClick={() => setActiveTab('signin')} className="underline font-medium hover:text-destructive/80">Fazer login</button>
+                        <XCircle className="h-3 w-3" />Email já cadastrado.{' '}<button type="button" onClick={() => setActiveTab('signin')} className="underline font-medium hover:text-destructive/80">Fazer login</button>
                       </p>
                     )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Senha</Label>
                     <div className="relative">
-                      <Input id="signup-password" type={showPassword ? "text" : "password"} placeholder="��������" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+                      <Input id="signup-password" type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
                       <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)}>
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
@@ -529,11 +529,11 @@ export const AuthScreen = () => {
                   <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg border border-border">
                     <Checkbox id="terms" checked={termsAccepted} onCheckedChange={(checked) => setTermsAccepted(checked as boolean)} className="mt-1" />
                     <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
-                      Li e concordo com os{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">Termos de Uso</span>{' '}e a{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">Pol�tica de Privacidade</span>
+                      Li e concordo com os{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">Termos de Uso</span>{' '}e a{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">Política de Privacidade</span>
                     </Label>
                   </div>
                   <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-black font-bold" disabled={loading || !termsAccepted || (emailExistsStatus === 'exists' && isEmailConfirmed)}>
-                    {loading ? "Criando conta..." : (emailExistsStatus === 'exists' && isEmailConfirmed) ? "Email j� cadastrado" : "Criar Conta"}
+                    {loading ? "Criando conta..." : (emailExistsStatus === 'exists' && isEmailConfirmed) ? "Email já cadastrado" : "Criar Conta"}
                   </Button>
                 </form>
               </CardContent>
@@ -544,3 +544,4 @@ export const AuthScreen = () => {
     </div>
   );
 };
+

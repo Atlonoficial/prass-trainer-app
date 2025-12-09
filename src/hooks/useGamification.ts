@@ -298,17 +298,19 @@ export const useGamification = () => {
         p_custom_points: customPoints
       });
 
-      if (error) throw error;
+      if (error) {
+        // Silenciar erro - função RPC pode não estar disponível
+        console.warn("[Gamification] RPC not available:", error.message);
+        return;
+      }
 
       await Promise.all([
         fetchUserPoints(),
         fetchActivities()
       ]);
-
-      toast.success(`Pontos adicionados: ${description}`);
     } catch (error) {
-      console.error("Error awarding points:", error);
-      toast.error("Erro ao adicionar pontos");
+      // Silenciar erro para usuário - gamificação é feature opcional
+      console.warn("[Gamification] Error awarding points:", error);
     }
   };
 

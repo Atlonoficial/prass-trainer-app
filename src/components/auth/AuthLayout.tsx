@@ -1,4 +1,4 @@
-import { ShapeProLogo } from '@/components/ui/ShapeProLogo';
+import { PrassTrainerLogo } from '@/components/ui/PrassTrainerLogo';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ReactNode } from 'react';
 

@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Send, Loader2, Sparkles, Calendar, ArrowLeft, Lock } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { ShapeProLogo } from '@/components/ui/ShapeProLogo';
+import { PrassTrainerLogo } from '@/components/ui/PrassTrainerLogo';
 import { useRevenueCat } from '@/hooks/useRevenueCat';
 import { PaywallModal } from '@/components/paywall/PaywallModal';
 
@@ -143,7 +143,7 @@ export default function AIChat() {
               </Button>
 
               <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-                <ShapeProLogo className="h-8 w-8" />
+                <PrassTrainerLogo className="h-8 w-8" />
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-1">
                     <span className="font-semibold text-lg">Prass IA</span>

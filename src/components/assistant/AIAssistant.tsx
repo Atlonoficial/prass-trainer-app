@@ -3,7 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Bot, Calendar, Award, Target, Plus, MessageSquare, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ShapeProLogo } from "@/components/ui/ShapeProLogo";
+import { PrassTrainerLogo } from "@/components/ui/PrassTrainerLogo";
 import { useAuthContext } from "@/components/auth/AuthProvider";
 import { useAIConversation } from "@/hooks/useAIConversation";
 import { useGamificationActions } from "@/hooks/useRealtimeGamification";
@@ -116,7 +116,7 @@ export const AIAssistant = () => {
 
         {/* Prass Trainer Logo - Responsiva */}
         <div className="mb-4 sm:mb-6">
-          <ShapeProLogo className="h-16 sm:h-24 md:h-32 w-auto mx-auto" />
+          <PrassTrainerLogo className="h-16 sm:h-24 md:h-32 w-auto mx-auto" />
         </div>
 
         {/* Saudação personalizada */}

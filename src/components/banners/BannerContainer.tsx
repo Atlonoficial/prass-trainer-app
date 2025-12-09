@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { StudentBannerDisplay } from './StudentBannerDisplay'
 import { useStableUserType } from '@/hooks/useStableUserType'
 import { logger } from '@/lib/logger'
@@ -9,26 +9,26 @@ interface BannerContainerProps {
   className?: string
 }
 
-export function BannerContainer({ 
-  placement, 
-  className, 
+export function BannerContainer({
+  placement,
+  className,
   maxBanners = 3
 }: BannerContainerProps) {
-  const { isStudent, loading, userType, teacherId, refresh } = useStableUserType()
+  const { isStudent, loading, userType, teacherId } = useStableUserType()
+  const hasLoggedRef = useRef(false)
 
-  // Refresh user type on mount
+  // Log only once on mount and when userType changes
   useEffect(() => {
-    logger.debug('BannerContainer', 'Component mounted, triggering refresh')
-    refresh()
-  }, [refresh])
-
-  logger.debug('BannerContainer', 'Detailed check', {
-    placement,
-    isStudent,
-    loading,
-    userType,
-    teacherId
-  })
+    if (!loading && !hasLoggedRef.current) {
+      hasLoggedRef.current = true
+      logger.debug('BannerContainer', 'User type resolved', {
+        placement,
+        isStudent,
+        userType,
+        teacherId
+      })
+    }
+  }, [loading, isStudent, userType, teacherId, placement])
 
   if (loading) {
     return null
@@ -36,16 +36,8 @@ export function BannerContainer({
 
   // Bloqueia APENAS se NÃO for estudante
   if (!isStudent && userType !== 'student') {
-    logger.debug('BannerContainer', 'Blocking - not a student', { isStudent, userType })
     return null
   }
-
-  logger.debug('BannerContainer', 'Rendering banners', { 
-    userType, 
-    isStudent, 
-    placement,
-    maxBanners
-  })
 
   return (
     <div className={className}>

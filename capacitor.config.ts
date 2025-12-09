@@ -16,14 +16,14 @@ const maybeServer =
     : {};
 
 const config: CapacitorConfig = {
-  appId: "com.modelo.app",
-  appName: "App Modelo",
+  appId: "com.prasstrainer.app",
+  appName: "Prass Trainer",
   webDir: "dist",
   bundledWebRuntime: false,
   backgroundColor: "#000000",
   version: "1.0.0",
   ios: {
-    scheme: "appmodelo",
+    scheme: "prasstrainer",
     contentInset: "automatic",
     backgroundColor: "#000000",
     allowsLinkPreview: false,
@@ -74,8 +74,8 @@ const config: CapacitorConfig = {
     allowMixedContent: true,
     captureInput: true,
     webContentsDebuggingEnabled: false,
-    appendUserAgent: "App Modelo/1.0",
-    overrideUserAgent: "App Modelo/1.0 Mobile App",
+    appendUserAgent: "Prass Trainer/1.0",
+    overrideUserAgent: "Prass Trainer/1.0 Mobile App",
     hideLogs: true,
     cleartext: true,
     networkSecurityConfig: true,

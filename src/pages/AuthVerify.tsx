@@ -252,7 +252,7 @@ export const AuthVerify = () => {
             navigate(redirectPath, { replace: true });
           }, 1500);
         } else {
-          setErrorMessage("📧 Email ainda não confirmado. Por favor, verifique sua caixa de entrada.");
+          setErrorMessage("📧 Email ainda não confirmado. Verifique sua caixa de entrada e a pasta SPAM.");
         }
       }
     } catch (error) {

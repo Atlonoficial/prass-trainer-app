@@ -6,86 +6,79 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Shape Pro Design System - Consultoria Online */
+/* Prass Trainer Design System - Tema Dark Premium */
 
 @layer base {
   :root {
-    /* PRASS TRAINER - Tema Claro */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 5%;
+    /* PRASS TRAINER - Tema Dark Premium */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 5%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 5%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
 
-    /* Primary: Laranja #F8A53A */
+    /* Primary: Laranja Dourado #F8A53A */
     --primary: 37 93% 60%;
     --primary-foreground: 0 0% 0%;
 
-    /* Secondary */
-    --secondary: 0 0% 96%;
-    --secondary-foreground: 0 0% 10%;
+    /* Secondary: Cinza Escuro */
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
 
-    /* Accent */
+    /* Accent: Laranja Vibrante */
     --accent: 37 93% 60%;
     --accent-foreground: 0 0% 0%;
 
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 40%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 100%;
+    --border: 0 0% 18%;
+    --input: 0 0% 12%;
     --ring: 37 93% 60%;
 
-    --radius: 1.25rem;
+    --radius: 1rem;
 
-    /* Shape Pro Specific Colors */
+    /* Prass Trainer Specific Colors */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
 
-    --warning: 43 96% 56%;
-    --warning-foreground: 0 0% 8%;
+    --warning: 37 93% 60%;
+    --warning-foreground: 0 0% 0%;
 
     --info: 217 91% 60%;
     --info-foreground: 0 0% 98%;
 
-    /* Cores sólidas para tema claro */
-    --gradient-primary: hsl(37 93% 60%);
-    --gradient-secondary: hsl(0 0% 96%);
-    --gradient-dark: hsl(0 0% 100%);
-    --gradient-card: hsl(0 0% 100%);
-    --gradient-accent: hsl(37 93% 60%);
+    /* Gradientes Premium */
+    --gradient-primary: linear-gradient(135deg, hsl(37 93% 55%) 0%, hsl(30 100% 50%) 100%);
+    --gradient-secondary: hsl(0 0% 15%);
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 7%) 0%, hsl(0 0% 5%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 12%) 0%, hsl(0 0% 8%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(37 93% 60%) 0%, hsl(45 100% 55%) 100%);
 
-    /* Sombras suaves */
-    --shadow-glow: none;
-    --shadow-card: 0 1px 3px hsl(0 0% 0% / 0.08);
-    --shadow-button: 0 1px 2px hsl(0 0% 0% / 0.05);
-    --shadow-subtle: 0 1px 2px hsl(0 0% 0% / 0.04);
+    /* Sombras com Glow Laranja */
+    --shadow-glow: 0 0 25px hsl(37 93% 60% / 0.35);
+    --shadow-card: 0 4px 20px hsl(0 0% 0% / 0.4);
+    --shadow-button: 0 4px 15px hsl(37 93% 60% / 0.3);
+    --shadow-subtle: 0 2px 10px hsl(0 0% 0% / 0.3);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 37 93% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 15%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 37 93% 60%;
   }
 
   .dark {
@@ -195,9 +188,9 @@
     overscroll-behavior-y: contain;
   }
 
-  /* Shape Pro Component Styles */
+  /* Prass Trainer Component Styles */
 
-  /* Buttons with Shape Pro branding */
+  /* Prass Trainer Premium Buttons */
   .btn-primary {
     @apply bg-gradient-primary text-primary-foreground font-bold py-3 px-6 rounded-2xl transition-all duration-300 shadow-button hover:shadow-glow hover:scale-105 active:scale-95 tracking-wide;
   }
@@ -210,7 +203,7 @@
     @apply bg-gradient-accent text-accent-foreground font-bold py-3 px-6 rounded-2xl transition-all duration-300 shadow-[0_4px_16px_hsl(217_91%_60%/0.4)] hover:shadow-[0_6px_24px_hsl(217_91%_60%/0.6)] hover:scale-105 active:scale-95 tracking-wide;
   }
 
-  /* Shape Pro Cards */
+  /* Prass Trainer Cards */
   .card-gradient {
     @apply bg-gradient-card border border-border shadow-card rounded-2xl backdrop-blur-sm;
   }
@@ -228,8 +221,9 @@
     @apply bg-gradient-accent bg-clip-text text-transparent font-bold tracking-wider;
   }
 
-  .text-shape-pro {
-    @apply text-primary font-black tracking-widest text-shadow-lg;
+  .text-prass-trainer {
+    @apply text-primary font-black tracking-widest;
+    text-shadow: 0 0 20px hsl(37 93% 60% / 0.5);
   }
 
   /* Layout Components */
@@ -248,7 +242,7 @@
     @apply bg-card/30 backdrop-blur-xl border border-border/60 shadow-subtle;
   }
 
-  /* Metric Cards with Shape Pro styling */
+  /* Prass Trainer Metric Cards */
   .metric-card {
     @apply card-gradient p-6 hover:scale-105 hover:shadow-glow transition-all duration-300 relative overflow-hidden;
   }
@@ -262,7 +256,7 @@
     @apply relative inline-flex items-center justify-center;
   }
 
-  /* Navigation with Shape Pro styling - Enhanced */
+  /* Prass Trainer Navigation - Premium */
   .nav-item {
     @apply flex flex-col items-center justify-center gap-0.5 p-2 rounded-xl transition-all duration-300 hover:bg-muted/60 active:scale-95 cursor-pointer;
   }
@@ -392,7 +386,7 @@
     }
   }
 
-  /* Shape Pro Badges */
+  /* Prass Trainer Badges */
   .badge-premium {
     @apply bg-gradient-primary text-primary-foreground px-3 py-1 rounded-full text-xs font-bold tracking-wider shadow-button;
   }
@@ -415,7 +409,7 @@
     @apply -translate-y-1;
   }
 
-  /* MICROINTERAÇÕES UNIVERSAIS - ShapePro */
+  /* MICROINTERAÇÕES UNIVERSAIS - Prass Trainer */
   .touch-feedback {
     @apply touch-manipulation active:scale-95 transition-transform duration-150;
   }
@@ -590,12 +584,12 @@
     }
   }
 
-  /* Shape Pro specific styling */
+  /* Prass Trainer specific styling */
   .consultoria-online {
     @apply text-warning font-bold tracking-[0.2em] text-sm;
   }
 
-  .shape-pro-title {
+  .prass-trainer-title {
     @apply font-black tracking-[0.15em] text-4xl;
   }
 
@@ -622,7 +616,7 @@
     }
   }
 
-  /* Desktop: manter scrollbar mas com estilo Shape Pro */
+  /* Desktop: manter scrollbar mas com estilo Prass Trainer */
   @media (min-width: 769px) {
     *::-webkit-scrollbar {
       width: 8px;

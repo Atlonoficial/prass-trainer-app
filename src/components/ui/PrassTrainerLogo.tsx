@@ -1,6 +1,6 @@
 import prassTrainerLogo from "@/assets/prass-trainer-logo.png";
 
-export const ShapeProLogo = ({ className = "h-16 w-auto" }: { className?: string }) => {
+export const PrassTrainerLogo = ({ className = "h-16 w-auto" }: { className?: string }) => {
   return (
     <div className="flex items-center justify-center">
       <img
@@ -12,5 +12,5 @@ export const ShapeProLogo = ({ className = "h-16 w-auto" }: { className?: string
   );
 };
 
-// Alias para compatibilidade
-export const PrassTrainerLogo = ShapeProLogo;
+// Alias para compatibilidade legada (deprecated)
+export const ShapeProLogo = PrassTrainerLogo;

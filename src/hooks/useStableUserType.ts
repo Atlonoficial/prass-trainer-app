@@ -21,12 +21,9 @@ export function useStableUserType(): UserTypeData {
 
   const fetchUserType = useCallback(async () => {
     if (!user) {
-      console.log('[useStableUserType] ⚠️ No user found')
       setLoading(false)
       return
     }
-
-    console.log('[useStableUserType] 🔍 Checking user type for:', user.id)
 
     try {
       // Check if student
@@ -36,12 +33,11 @@ export function useStableUserType(): UserTypeData {
         .eq('user_id', user.id)
         .maybeSingle()
 
-      if (studentError) {
-        console.error('[useStableUserType] ❌ Student check error:', studentError)
+      if (studentError && !studentError.message?.includes('does not exist')) {
+        console.warn('[useStableUserType] Student check error:', studentError.message)
       }
 
       if (studentData) {
-        console.log('[useStableUserType] ✅ User IS a student:', studentData)
         setIsStudent(true)
         setTeacherId(studentData.teacher_id)
         setUserType('student')
@@ -55,19 +51,16 @@ export function useStableUserType(): UserTypeData {
         .select('*', { count: 'exact', head: true })
         .eq('teacher_id', user.id)
 
-      if (teacherError) {
-        console.error('[useStableUserType] ❌ Teacher check error:', teacherError)
+      if (teacherError && !teacherError.message?.includes('does not exist')) {
+        console.warn('[useStableUserType] Teacher check error:', teacherError.message)
       }
 
       if (count && count > 0) {
-        console.log('[useStableUserType] ✅ User IS a teacher with', count, 'students')
         setIsTeacher(true)
         setUserType('teacher')
-      } else {
-        console.log('[useStableUserType] ⚠️ User is neither student nor teacher')
       }
     } catch (error) {
-      console.error('[useStableUserType] ❌ Unexpected error:', error)
+      // Silenciar erros - feature pode não estar disponível
     } finally {
       setLoading(false)
     }
