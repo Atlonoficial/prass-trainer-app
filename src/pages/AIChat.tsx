@@ -146,7 +146,7 @@ export default function AIChat() {
                 <ShapeProLogo className="h-8 w-8" />
                 <div className="flex flex-col items-center">
                   <div className="flex items-center gap-1">
-                    <span className="font-semibold text-lg">Shape AI</span>
+                    <span className="font-semibold text-lg">Prass IA</span>
                     {isPremium && <span className="text-[10px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-bold">PRO</span>}
                   </div>
                   <span className="text-[10px] text-muted-foreground">

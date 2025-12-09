@@ -49,9 +49,10 @@ export const Dashboard = ({ onCoachClick, onWorkoutClick }: DashboardProps) => {
   // ETAPA 3: Feedback system monitoring removed (BUILD 35)
 
   const rawName = userProfile?.name || (user?.user_metadata as any)?.name || '';
+  const emailName = user?.email?.split('@')[0] || 'Usuário';
   const firstName = typeof rawName === 'string' && rawName.trim() && !rawName.includes('@')
     ? rawName.split(' ')[0]
-    : 'Usuário';
+    : emailName.charAt(0).toUpperCase() + emailName.slice(1);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -155,8 +156,8 @@ export const Dashboard = ({ onCoachClick, onWorkoutClick }: DashboardProps) => {
       {/* Logo Header */}
       <div className="mb-4 text-center pt-2">
         <img
-          src="/lovable-uploads/2133926f-121d-45ce-8cff-80c84a1a0856.png"
-          alt="Shape Pro Logo"
+          src="/prass-trainer-logo.png"
+          alt="Prass Trainer Logo"
           className="w-20 h-auto mx-auto opacity-60"
         />
       </div>
@@ -307,3 +308,4 @@ export const Dashboard = ({ onCoachClick, onWorkoutClick }: DashboardProps) => {
     </div>
   );
 };
+

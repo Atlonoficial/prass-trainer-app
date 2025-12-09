@@ -220,7 +220,7 @@ export const getActionDescription = (type: string): string => {
     case 'email_change':
       return 'Seu email foi alterado com sucesso!';
     case 'invite':
-      return 'Convite aceito! Bem-vindo à Shape Pro!';
+      return 'Convite aceito! Bem-vindo à Prass Trainer!';
     case 'magiclink':
       return 'Login realizado com sucesso!';
     default:

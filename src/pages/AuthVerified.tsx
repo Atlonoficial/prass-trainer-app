@@ -9,7 +9,7 @@ export const AuthVerified = () => {
   const [countdown, setCountdown] = useState(3);
 
   useEffect(() => {
-    document.title = "Email confirmado | Shape Pro";
+    document.title = "Email confirmado | Prass Trainer";
     
     // Countdown automático
     const timer = setInterval(() => {
@@ -37,7 +37,7 @@ export const AuthVerified = () => {
           <CardTitle className="text-2xl">✅ Email Confirmado!</CardTitle>
           <CardDescription className="text-base">
             Sua conta foi verificada com sucesso.<br />
-            Bem-vindo ao Shape Pro! 🎉
+            Bem-vindo ao Prass Trainer! 🎉
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

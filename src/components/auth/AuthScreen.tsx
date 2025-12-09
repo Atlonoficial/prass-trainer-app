@@ -87,7 +87,7 @@ export const AuthScreen = () => {
           // Sucesso!
           toast({
             title: "Login realizado com sucesso!",
-            description: "Bem-vindo de volta ao Shape Pro.",
+            description: "Bem-vindo de volta ao Prass Trainer.",
           });
 
           return; // Sair do loop
@@ -239,7 +239,7 @@ export const AuthScreen = () => {
       if (result?.session) {
         toast({
           title: "‚úÖ Conta criada!",
-          description: "Bem-vindo ao Shape Pro!",
+          description: "Bem-vindo ao Prass Trainer!",
         });
         navigate('/', { replace: true });
       } else {
@@ -426,109 +426,60 @@ export const AuthScreen = () => {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <img
-            src="/bispo-shape-pro.png"
-            alt="Bispo - Shape Pro Consultoria Online"
-            className="h-32 w-auto mx-auto mb-4"
+            src="/prass-trainer-icon.png"
+            alt="Prass Trainer - Transforme sua vida"
+            className="h-32 w-auto mx-auto mb-4 rounded-2xl"
           />
-          <p className="text-muted-foreground">Sua jornada fitness come√ßa aqui</p>
+          <p className="text-muted-foreground">Transforme sua vida com musculaÁ„o especializada</p>
 
           {/* Health Disclaimer - Google Play Compliance */}
           <div className="mt-6 px-4 text-[10px] text-muted-foreground/40 text-center leading-tight">
             <p>
-              <strong>Aviso de Sa√∫de:</strong> Este aplicativo oferece sugest√µes de exerc√≠cios e nutri√ß√£o para fins informativos.
-              Consulte um m√©dico antes de iniciar qualquer programa.
+              <strong>Aviso de Sa˙de:</strong> Este aplicativo oferece sugestıes de exercÌcios e nutriÁ„o para fins informativos.
+              Consulte um mÈdico antes de iniciar qualquer programa.
             </p>
           </div>
         </div>
 
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as 'signin' | 'signup')} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="signin">Entrar</TabsTrigger>
-            <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-black/50 border border-primary/30">
+            <TabsTrigger value="signin" className="data-[state=active]:bg-primary data-[state=active]:text-black font-semibold">Entrar</TabsTrigger>
+            <TabsTrigger value="signup" className="data-[state=active]:bg-primary data-[state=active]:text-black font-semibold">Cadastrar</TabsTrigger>
           </TabsList>
 
           <TabsContent value="signin">
-            <Card>
+            <Card className="bg-black/40 border-primary/20">
               <CardHeader>
                 <CardTitle>Fazer Login</CardTitle>
-                <CardDescription>
-                  Entre com sua conta para acessar seus treinos e dietas
-                </CardDescription>
+                <CardDescription>Entre com sua conta para acessar seus treinos e dietas</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <div className="relative">
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                      />
-                    </div>
+                    <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Senha</Label>
                     <div className="relative">
-                      <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
+                      <Input id="password" type={showPassword ? "text" : "password"} placeholder="ïïïïïïïï" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                      <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      variant="link"
-                      size="sm"
-                      onClick={handleResetPassword}
-                      disabled={resetLoading || resetCooldown > 0}
-                      className="flex items-center gap-2"
-                    >
-                      {resetLoading ? (
-                        <>
-                          <div className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                          Enviando...
-                        </>
-                      ) : resetCooldown > 0 ? (
-                        <>
-                          <Mail className="h-3 w-3" />
-                          Aguarde {resetCooldown}s
-                        </>
-                      ) : (
-                        <>
-                          <Mail className="h-3 w-3" />
-                          Esqueceu a senha?
-                        </>
-                      )}
+                    <Button type="button" variant="link" size="sm" onClick={handleResetPassword} disabled={resetLoading || resetCooldown > 0} className="flex items-center gap-2 text-primary">
+                      {resetLoading ? <><div className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />Enviando...</> : resetCooldown > 0 ? <><Mail className="h-3 w-3" />Aguarde {resetCooldown}s</> : <><Mail className="h-3 w-3" />Esqueceu a senha?</>}
                     </Button>
                   </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
+                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-black font-bold" disabled={loading}>
                     {loading ? "Entrando..." : "Entrar"}
                   </Button>
                 </form>
@@ -537,133 +488,52 @@ export const AuthScreen = () => {
           </TabsContent>
 
           <TabsContent value="signup">
-            <Card>
+            <Card className="bg-black/40 border-primary/20">
               <CardHeader>
                 <CardTitle>Criar Conta</CardTitle>
-                <CardDescription>
-                  Crie sua conta gratuita e comece sua transforma√ß√£o
-                </CardDescription>
+                <CardDescription>Crie sua conta gratuita e comece sua transformaÁ„o</CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="name">Nome Completo</Label>
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="Seu nome completo"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
+                    <Input id="name" type="text" placeholder="Seu nome completo" value={name} onChange={(e) => setName(e.target.value)} required />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <div className="relative">
-                      <Input
-                        id="signup-email"
-                        type="email"
-                        placeholder="seu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="pr-10"
-                      />
-                      {/* FASE 3: Indicador visual de email */}
+                      <Input id="signup-email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required className="pr-10" />
                       {emailExistsStatus && (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                          {emailExistsStatus === 'checking' && (
-                            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-                          )}
-                          {emailExistsStatus === 'exists' && (
-                            <XCircle className="h-4 w-4 text-destructive" />
-                          )}
-                          {emailExistsStatus === 'available' && (
-                            <CheckCircle className="h-4 w-4 text-green-500" />
-                          )}
+                          {emailExistsStatus === 'checking' && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+                          {emailExistsStatus === 'exists' && <XCircle className="h-4 w-4 text-destructive" />}
+                          {emailExistsStatus === 'available' && <CheckCircle className="h-4 w-4 text-green-500" />}
                         </div>
                       )}
                     </div>
-                    {/* Mensagem de feedback */}
                     {emailExistsStatus === 'exists' && (
                       <p className="text-xs text-destructive mt-1 flex items-center gap-1">
-                        <XCircle className="h-3 w-3" />
-                        Email j√° cadastrado.{' '}
-                        <button
-                          type="button"
-                          onClick={() => setActiveTab('signin')}
-                          className="underline font-medium hover:text-destructive/80"
-                        >
-                          Fazer login
-                        </button>
+                        <XCircle className="h-3 w-3" />Email j· cadastrado.{' '}<button type="button" onClick={() => setActiveTab('signin')} className="underline font-medium hover:text-destructive/80">Fazer login</button>
                       </p>
                     )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Senha</Label>
                     <div className="relative">
-                      <Input
-                        id="signup-password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢‚Ä¢"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        minLength={6}
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
+                      <Input id="signup-password" type={showPassword ? "text" : "password"} placeholder="ïïïïïïïï" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+                      <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
                   </div>
-
-                  {/* Checkbox de Termos de Uso */}
                   <div className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg border border-border">
-                    <Checkbox
-                      id="terms"
-                      checked={termsAccepted}
-                      onCheckedChange={(checked) => setTermsAccepted(checked as boolean)}
-                      className="mt-1"
-                    />
+                    <Checkbox id="terms" checked={termsAccepted} onCheckedChange={(checked) => setTermsAccepted(checked as boolean)} className="mt-1" />
                     <Label htmlFor="terms" className="text-sm leading-relaxed cursor-pointer">
-                      Li e concordo com os{' '}
-                      <span
-                        onClick={() => import('@capacitor/browser').then(({ Browser }) => Browser.open({ url: 'https://shapepro.site/app/terms' }))}
-                        className="text-primary underline hover:text-primary/80 font-medium cursor-pointer"
-                      >
-                        Termos de Uso
-                      </span>
-                      {' '}e a{' '}
-                      <span
-                        onClick={() => import('@capacitor/browser').then(({ Browser }) => Browser.open({ url: 'https://shapepro.site/app/privacy' }))}
-                        className="text-primary underline hover:text-primary/80 font-medium cursor-pointer"
-                      >
-                        Pol√≠tica de Privacidade
-                      </span>
+                      Li e concordo com os{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">Termos de Uso</span>{' '}e a{' '}<span className="text-primary underline hover:text-primary/80 font-medium cursor-pointer">PolÌtica de Privacidade</span>
                     </Label>
                   </div>
-
-                  {/* FASE 4: Feedback no bot√£o */}
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={loading || !termsAccepted || (emailExistsStatus === 'exists' && isEmailConfirmed)}
-                  >
-                    {loading
-                      ? "Criando conta..."
-                      : (emailExistsStatus === 'exists' && isEmailConfirmed)
-                        ? "Email j√° cadastrado"
-                        : "Criar Conta"}
+                  <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-black font-bold" disabled={loading || !termsAccepted || (emailExistsStatus === 'exists' && isEmailConfirmed)}>
+                    {loading ? "Criando conta..." : (emailExistsStatus === 'exists' && isEmailConfirmed) ? "Email j· cadastrado" : "Criar Conta"}
                   </Button>
                 </form>
               </CardContent>

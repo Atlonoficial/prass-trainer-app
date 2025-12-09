@@ -42,7 +42,7 @@ export const AuthInvite = () => {
     >
       <AuthStatusHandler
         status={status}
-        successMessage="Convite aceito com sucesso! Bem-vindo à Shape Pro!"
+        successMessage="Convite aceito com sucesso! Bem-vindo à Prass Trainer!"
         errorMessage={errorMessage}
         redirectPath={redirectPath}
         onRetry={handleRetry}

@@ -1,5 +1,5 @@
 /**
- * SHAPE PRO - APP DO ALUNO - ÁREA DE MEMBROS
+ * PRASS TRAINER - APP DO ALUNO - ÁREA DE MEMBROS
  * 
  * Este componente exibe APENAS os cursos publicados pelo professor.
  * Criação/edição de conteúdo é feita no Dashboard Professor (projeto separado).
@@ -52,8 +52,8 @@ export const Members = () => {
         {/* Logo */}
         <div className="mb-4">
           <img
-            src="/lovable-uploads/2133926f-121d-45ce-8cff-80c84a1a0856.png"
-            alt="Shape Pro Logo"
+            src="/prass-trainer-logo.png"
+            alt="Prass Trainer Logo"
             className="w-32 h-auto mx-auto"
           />
         </div>

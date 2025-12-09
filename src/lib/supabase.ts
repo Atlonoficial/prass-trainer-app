@@ -165,7 +165,7 @@ export const signUpUser = async (
   // 🛡️ GUARD-RAIL: Forçar produção se detectar Lovable preview
   const previewRegex = /(lovable\.dev|lovableproject\.com|\.lovable\.app)/i;
   const finalRedirect = previewRegex.test(redirectUrl)
-    ? `https://shapepro.site/auth/confirm?src=${srcParam}`
+    ? `https://seu-dominio.com/auth/confirm?src=${srcParam}`
     : `${redirectUrl}${redirectUrl.includes('?') ? '&' : '?'}src=${srcParam}`;
 
   logger.debug('signUpUser', 'Smart Origin Detection', {
@@ -344,7 +344,7 @@ export const resetPasswordForEmail = async (
   // ✅ GARANTIR deep link em plataforma nativa (Capacitor)
   let redirectUrl: string;
   if (originMetadata.signup_platform === 'mobile' || originMetadata.is_mobile) {
-    redirectUrl = 'shapepro://auth/recovery';
+    redirectUrl = 'appmodelo://auth/recovery';
   } else {
     redirectUrl = baseRedirectUrl.replace('/auth/confirm', '/auth/recovery');
   }
