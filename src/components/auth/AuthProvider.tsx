@@ -293,7 +293,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   // ✅ BUILD 50: Mostrar LoadingScreen APENAS se loading E forceRender = false
   if (auth.loading && !forceRender) {
-    return <LoadingScreen />;
+    return (
+      <AuthContext.Provider value={auth}>
+        <LoadingScreen />
+      </AuthContext.Provider>
+    );
   }
 
   // ✅ Se forceRender = true, ignorar auth.loading e renderizar app
@@ -302,7 +306,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }
 
   if (!auth.isAuthenticated && !isPublicRoute) {
-    return <AuthScreen />;
+    return (
+      <AuthContext.Provider value={auth}>
+        <AuthScreen />
+      </AuthContext.Provider>
+    );
   }
 
   return (
