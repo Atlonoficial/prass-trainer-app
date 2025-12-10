@@ -1,10 +1,11 @@
 /**
  * HealthDataService - Serviço para integração com Apple HealthKit (iOS) e Google Health Connect (Android)
  * BUILD 83: Corrigido fluxo de permissões e logging detalhado
+ * 
+ * NOTA: capacitor-health temporariamente desabilitado (SDK 36 incompatível com Appflow)
  */
 
 import { Capacitor } from '@capacitor/core';
-import { Health, HealthPermission } from 'capacitor-health';
 import {
     DailyHealthStats,
     WeeklyHealthStats,
@@ -14,11 +15,22 @@ import {
     WorkoutType
 } from '@/types/health';
 
-const FEATURE_ENABLED = true;
+// Feature temporariamente desabilitada - capacitor-health requer SDK 36
+const FEATURE_ENABLED = false;
 
-// Permissões que vamos solicitar
-// Ref: https://github.com/nicoritschel/capacitor-health
-// Tipos válidos: READ_STEPS, READ_WORKOUTS, READ_HEART_RATE, etc
+// Stub types para evitar erros de compilação
+type HealthPermission = 'READ_STEPS' | 'READ_WORKOUTS';
+
+// Stubs para Health plugin desabilitado
+const Health = {
+    isHealthAvailable: async () => ({ available: false }),
+    requestHealthPermissions: async (_: { permissions: HealthPermission[] }) => ({ permissions: [] }),
+    showHealthConnectInPlayStore: async () => { },
+    queryAggregated: async (_: any) => ({ aggregatedData: [] }),
+    queryWorkouts: async (_: any) => ({ workouts: [] })
+};
+
+// Permissões que vamos solicitar (quando o plugin for reabilitado)
 const HEALTH_PERMISSIONS: HealthPermission[] = [
     'READ_STEPS',
     'READ_WORKOUTS'
