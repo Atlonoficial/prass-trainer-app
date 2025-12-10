@@ -16,7 +16,7 @@ const maybeServer =
     : {};
 
 const config: CapacitorConfig = {
-  appId: "com.prasstrainer.app",
+  appId: "com.atlontech.shapepro.aluno",
   appName: "Prass Trainer",
   webDir: "dist",
   bundledWebRuntime: false,
