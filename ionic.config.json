@@ -1,0 +1,7 @@
+{
+    "name": "prass-trainer",
+    "integrations": {
+        "capacitor": {}
+    },
+    "type": "react"
+}
