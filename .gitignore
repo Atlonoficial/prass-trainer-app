@@ -38,5 +38,10 @@ yarn-error.*
 *.tsbuildinfo
 
 # generated native folders
-/ios
-/android
+# Nota: iOS e Android NÃO são ignorados para permitir builds no Appflow
+# /ios
+# /android
+
+# Ignore compiled assets with potential secrets
+android/app/src/main/assets/public/
+ios/App/App/public/
