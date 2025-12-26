@@ -27,6 +27,7 @@ export default function RegisterScreen() {
     const { signUp } = useAuth();
 
     const handleRegister = async () => {
+        // Validações
         if (!name.trim() || !email.trim() || !password.trim()) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
             return;
@@ -43,35 +44,50 @@ export default function RegisterScreen() {
         }
 
         setIsLoading(true);
+        console.log('🚀 Iniciando cadastro para:', email.trim());
+
         try {
             // 1. Criar conta no Supabase Auth
+            console.log('📝 Chamando signUp...');
             const result = await signUp(email.trim(), password, {
                 full_name: name.trim(),
                 user_type: 'student',
             });
+            console.log('✅ signUp retornou:', result);
 
             if (!result || !result.user) {
-                throw new Error('Erro ao criar conta');
+                console.error('❌ Resultado inválido do signUp:', result);
+                throw new Error('Erro ao criar conta - resposta inválida');
             }
 
             const userId = result.user.id;
+            console.log('👤 User ID criado:', userId);
 
             if (userId) {
                 // 2. Verificar se professor já cadastrou este email
-                const { data: existingStudent } = await supabase
+                console.log('🔍 Verificando se email já existe...');
+                const { data: existingStudent, error: searchError } = await supabase
                     .from('students')
                     .select('*')
                     .eq('email', email.trim().toLowerCase())
                     .is('user_id', null)
                     .maybeSingle();
 
+                if (searchError) {
+                    console.warn('⚠️ Erro ao buscar aluno:', searchError);
+                }
+
                 if (existingStudent) {
                     // 3A. Professor já cadastrou - vincular user_id ao registro existente
                     console.log('📎 Vinculando aluno ao registro do professor:', existingStudent.id);
-                    await supabase
+                    const { error: updateError } = await supabase
                         .from('students')
                         .update({ user_id: userId })
                         .eq('id', existingStudent.id);
+
+                    if (updateError) {
+                        console.warn('⚠️ Erro ao vincular:', updateError);
+                    }
 
                     Alert.alert(
                         'Sucesso!',
@@ -94,7 +110,7 @@ export default function RegisterScreen() {
                         });
 
                     if (insertError) {
-                        console.warn('Aviso ao criar registro de aluno:', insertError);
+                        console.warn('⚠️ Aviso ao criar registro de aluno:', insertError);
                         // Não bloquear - o trigger no banco pode ter criado
                     }
 
@@ -112,11 +128,22 @@ export default function RegisterScreen() {
                 );
             }
         } catch (error: any) {
-            console.error('Erro no cadastro:', error);
-            Alert.alert(
-                'Erro no cadastro',
-                error.message || 'Não foi possível criar a conta. Tente novamente.'
-            );
+            console.error('❌ Erro no cadastro:', error);
+            console.error('❌ Detalhes:', JSON.stringify(error, null, 2));
+
+            let errorMessage = 'Não foi possível criar a conta. ';
+
+            if (error.message?.includes('network') || error.message?.includes('fetch')) {
+                errorMessage += 'Verifique sua conexão com a internet.';
+            } else if (error.message?.includes('already registered') || error.message?.includes('exists')) {
+                errorMessage = 'Este e-mail já está cadastrado. Tente fazer login.';
+            } else if (error.message) {
+                errorMessage += error.message;
+            } else {
+                errorMessage += 'Tente novamente mais tarde.';
+            }
+
+            Alert.alert('Erro no cadastro', errorMessage);
         } finally {
             setIsLoading(false);
         }
