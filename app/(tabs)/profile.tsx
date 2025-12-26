@@ -45,16 +45,12 @@ export default function ProfileScreen() {
                         try {
                             await signOut();
                             console.log('✅ signOut executado com sucesso');
-                            // Pequeno delay antes de redirecionar
-                            setTimeout(() => {
-                                router.replace('/(auth)/login');
-                            }, 100);
+                            // Redirecionar para o index que vai verificar o estado
+                            router.replace('/');
                         } catch (error: any) {
                             console.error('❌ Erro ao sair:', error);
-                            Alert.alert(
-                                'Erro ao sair',
-                                error?.message || 'Não foi possível sair. Tente novamente.'
-                            );
+                            // Mesmo com erro, tentar redirecionar
+                            router.replace('/');
                         }
                     },
                 },

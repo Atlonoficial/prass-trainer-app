@@ -79,8 +79,35 @@ export function useAuth() {
     }, []);
 
     const signOut = useCallback(async () => {
-        const { error } = await supabase.auth.signOut();
-        if (error) throw error;
+        console.log('🔓 Iniciando signOut...');
+        try {
+            // 1. Primeiro, resetar o estado local imediatamente
+            setAuthState({
+                user: null,
+                session: null,
+                isLoading: false,
+                isAuthenticated: false,
+            });
+
+            // 2. Depois, fazer signOut no Supabase
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                console.error('Erro no signOut Supabase:', error);
+                throw error;
+            }
+
+            console.log('✅ SignOut completado com sucesso');
+        } catch (error) {
+            console.error('❌ Erro no signOut:', error);
+            // Mesmo com erro, manter o estado como deslogado
+            setAuthState({
+                user: null,
+                session: null,
+                isLoading: false,
+                isAuthenticated: false,
+            });
+            throw error;
+        }
     }, []);
 
     const resetPassword = useCallback(async (email: string) => {
