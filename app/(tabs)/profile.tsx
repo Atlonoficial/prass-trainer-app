@@ -31,6 +31,7 @@ export default function ProfileScreen() {
         : 'Membro';
 
     const handleLogout = () => {
+        console.log('🚪 handleLogout chamado');
         Alert.alert(
             'Sair da conta',
             'Tem certeza que deseja sair?',
@@ -40,11 +41,20 @@ export default function ProfileScreen() {
                     text: 'Sair',
                     style: 'destructive',
                     onPress: async () => {
+                        console.log('🔄 Iniciando logout...');
                         try {
                             await signOut();
-                            router.replace('/(auth)/login');
-                        } catch (error) {
-                            console.error('Erro ao sair:', error);
+                            console.log('✅ signOut executado com sucesso');
+                            // Pequeno delay antes de redirecionar
+                            setTimeout(() => {
+                                router.replace('/(auth)/login');
+                            }, 100);
+                        } catch (error: any) {
+                            console.error('❌ Erro ao sair:', error);
+                            Alert.alert(
+                                'Erro ao sair',
+                                error?.message || 'Não foi possível sair. Tente novamente.'
+                            );
                         }
                     },
                 },
