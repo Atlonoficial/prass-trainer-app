@@ -170,10 +170,14 @@ export default function ProfileScreen() {
                 </View>
 
                 {/* Logout */}
-                <AnimatedCard style={styles.logoutButton} delay={600} onPress={handleLogout}>
+                <TouchableOpacity
+                    style={styles.logoutButton}
+                    onPress={handleLogout}
+                    activeOpacity={0.7}
+                >
                     <Feather name="log-out" size={18} color="#EF4444" />
                     <Text style={styles.logoutText}>Sair da conta</Text>
-                </AnimatedCard>
+                </TouchableOpacity>
 
                 <Text style={styles.version}>Versão 1.0.0</Text>
             </ScrollView>
@@ -331,6 +335,8 @@ const styles = StyleSheet.create({
         gap: 8,
         borderWidth: 1,
         borderColor: '#EF444440',
+        backgroundColor: Colors.dark.backgroundSecondary,
+        borderRadius: 20,
     },
     logoutText: {
         fontSize: 15,
