@@ -57,25 +57,15 @@ export default function DashboardScreen() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            <ScrollView
-                style={styles.scrollView}
-                contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                        tintColor={Colors.dark.tint}
-                    />
-                }
-            >
-                {/* Header */}
-                <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
-                    <Image
-                        source={require('../../assets/logo.png')}
-                        style={styles.headerLogo}
-                        resizeMode="contain"
-                    />
+            {/* Header Fixo com Logo Centralizada */}
+            <View style={styles.header}>
+                <View style={styles.headerSide} />
+                <Image
+                    source={require('../../assets/logo.png')}
+                    style={styles.headerLogo}
+                    resizeMode="contain"
+                />
+                <View style={styles.headerSide}>
                     <TouchableOpacity
                         style={styles.notificationButton}
                         onPress={() => router.push('/notifications')}
@@ -89,8 +79,21 @@ export default function DashboardScreen() {
                             </View>
                         )}
                     </TouchableOpacity>
-                </Animated.View>
+                </View>
+            </View>
 
+            <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        tintColor={Colors.dark.tint}
+                    />
+                }
+            >
                 {/* Data */}
                 <View style={styles.dateContainer}>
                     <Feather name="calendar" size={16} color={Colors.dark.textSecondary} />
@@ -278,22 +281,28 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.dark.background,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        backgroundColor: Colors.dark.background,
+    },
+    headerSide: {
+        width: 50,
+        alignItems: 'flex-end',
+    },
+    headerLogo: {
+        width: 120,
+        height: 50,
+    },
     scrollView: {
         flex: 1,
     },
     scrollContent: {
         paddingBottom: 32,
         paddingHorizontal: 16,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 8,
-    },
-    headerLogo: {
-        width: 140,
-        height: 55,
     },
     notificationButton: {
         width: 40,
