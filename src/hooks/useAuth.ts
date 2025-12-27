@@ -89,8 +89,47 @@ export function useAuth() {
                 isAuthenticated: false,
             });
 
-            // 2. Depois, fazer signOut no Supabase
-            const { error } = await supabase.auth.signOut();
+            // 2. Remover canais de realtime ativos
+            const channels = supabase.getChannels();
+            for (const channel of channels) {
+                await supabase.removeChannel(channel);
+            }
+            console.log(`📡 Removidos ${channels.length} canais realtime`);
+
+            // 3. Limpar tokens do storage (SecureStore no mobile, localStorage no web)
+            try {
+                const { Platform } = await import('react-native');
+                if (Platform.OS === 'web') {
+                    // Limpar localStorage no web
+                    const keysToRemove = Object.keys(localStorage).filter(key =>
+                        key.includes('supabase') || key.includes('sb-')
+                    );
+                    keysToRemove.forEach(key => localStorage.removeItem(key));
+                    console.log(`🗑️ Limpas ${keysToRemove.length} chaves do localStorage`);
+                } else {
+                    // Limpar SecureStore no mobile
+                    const SecureStore = await import('expo-secure-store');
+                    const keysToTry = [
+                        'supabase-auth-token',
+                        'sb-auth-token',
+                        'supabase.auth.token',
+                        'sb-vrzmfhwzoeutokzyypwv-auth-token'
+                    ];
+                    for (const key of keysToTry) {
+                        try {
+                            await SecureStore.deleteItemAsync(key);
+                        } catch (e) {
+                            // Ignora se a chave não existir
+                        }
+                    }
+                    console.log('🗑️ SecureStore limpo');
+                }
+            } catch (storageError) {
+                console.warn('⚠️ Erro ao limpar storage:', storageError);
+            }
+
+            // 4. Fazer signOut no Supabase com scope global (invalida todas as sessões)
+            const { error } = await supabase.auth.signOut({ scope: 'global' });
             if (error) {
                 console.error('Erro no signOut Supabase:', error);
                 throw error;
