@@ -81,22 +81,8 @@ export function useAuth() {
     const signOut = useCallback(async () => {
         console.log('🔓 Iniciando signOut...');
         try {
-            // 1. Primeiro, resetar o estado local imediatamente
-            setAuthState({
-                user: null,
-                session: null,
-                isLoading: false,
-                isAuthenticated: false,
-            });
-
-            // 2. Remover canais de realtime ativos
-            const channels = supabase.getChannels();
-            for (const channel of channels) {
-                await supabase.removeChannel(channel);
-            }
-            console.log(`📡 Removidos ${channels.length} canais realtime`);
-
-            // 3. Limpar tokens do storage (SecureStore no mobile, localStorage no web)
+            // 1. PRIMEIRO: Limpar tokens do storage ANTES do signOut
+            // Isso garante que mesmo se signOut falhar, o storage está limpo
             try {
                 const { Platform } = await import('react-native');
                 if (Platform.OS === 'web') {
@@ -113,7 +99,10 @@ export function useAuth() {
                         'supabase-auth-token',
                         'sb-auth-token',
                         'supabase.auth.token',
-                        'sb-vrzmfhwzoeutokzyypwv-auth-token'
+                        'sb-vrzmfhwzoeutokzyypwv-auth-token',
+                        // Adicionar mais chaves possíveis
+                        'supabase.auth.refreshToken',
+                        'supabase.auth.accessToken'
                     ];
                     for (const key of keysToTry) {
                         try {
@@ -128,24 +117,68 @@ export function useAuth() {
                 console.warn('⚠️ Erro ao limpar storage:', storageError);
             }
 
-            // 4. Fazer signOut no Supabase com scope global (invalida todas as sessões)
-            const { error } = await supabase.auth.signOut({ scope: 'global' });
-            if (error) {
-                console.error('Erro no signOut Supabase:', error);
-                throw error;
+            // 2. Remover canais de realtime ativos
+            try {
+                const channels = supabase.getChannels();
+                for (const channel of channels) {
+                    await supabase.removeChannel(channel);
+                }
+                console.log(`📡 Removidos ${channels.length} canais realtime`);
+            } catch (channelError) {
+                console.warn('⚠️ Erro ao remover canais:', channelError);
             }
 
-            console.log('✅ SignOut completado com sucesso');
-        } catch (error) {
-            console.error('❌ Erro no signOut:', error);
-            // Mesmo com erro, manter o estado como deslogado
+            // 3. Fazer signOut no Supabase com scope LOCAL (mais confiável)
+            try {
+                const { error } = await supabase.auth.signOut({ scope: 'local' });
+                if (error) {
+                    console.error('Erro no signOut Supabase:', error);
+                }
+            } catch (signOutError) {
+                console.warn('⚠️ Erro no signOut Supabase:', signOutError);
+            }
+
+            // 4. Resetar o estado local
             setAuthState({
                 user: null,
                 session: null,
                 isLoading: false,
                 isAuthenticated: false,
             });
-            throw error;
+
+            console.log('✅ SignOut completado com sucesso');
+
+            // 5. Forçar reload do app para garantir estado limpo (em produção)
+            try {
+                const { Platform } = await import('react-native');
+                if (Platform.OS !== 'web') {
+                    const Updates = await import('expo-updates');
+                    if (Updates.reloadAsync) {
+                        console.log('🔄 Forçando reload do app...');
+                        // Aguardar um pouco para o navegação ter tempo de processar
+                        setTimeout(async () => {
+                            try {
+                                await Updates.reloadAsync();
+                            } catch (e) {
+                                console.log('⚠️ Reload não disponível em dev');
+                            }
+                        }, 300);
+                    }
+                }
+            } catch (e) {
+                // Expo Updates pode não estar disponível em desenvolvimento
+                console.log('⚠️ Expo Updates não disponível');
+            }
+
+        } catch (error) {
+            console.error('❌ Erro no signOut:', error);
+            // Mesmo com erro, garantir estado como deslogado
+            setAuthState({
+                user: null,
+                session: null,
+                isLoading: false,
+                isAuthenticated: false,
+            });
         }
     }, []);
 
