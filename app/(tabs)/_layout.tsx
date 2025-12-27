@@ -1,10 +1,37 @@
 // app/(tabs)/_layout.tsx
-import { Tabs } from 'expo-router';
-import { View, StyleSheet } from 'react-native';
+import { useEffect } from 'react';
+import { Tabs, router } from 'expo-router';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { useAuth } from '@/hooks/useAuth';
 import Colors from '@/constants/Colors';
 
 export default function TabLayout() {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    // Proteger rotas - redirecionar para login se não autenticado
+    useEffect(() => {
+        console.log('📍 TabLayout - isAuthenticated:', isAuthenticated, 'isLoading:', isLoading);
+        if (!isLoading && !isAuthenticated) {
+            console.log('🚨 Usuário não autenticado! Redirecionando para login...');
+            router.replace('/(auth)/login');
+        }
+    }, [isAuthenticated, isLoading]);
+
+    // Mostrar loading enquanto verifica autenticação
+    if (isLoading) {
+        return (
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.dark.background }}>
+                <ActivityIndicator size="large" color={Colors.dark.tint} />
+            </View>
+        );
+    }
+
+    // Se não autenticado, não renderizar nada (vai redirecionar)
+    if (!isAuthenticated) {
+        return null;
+    }
+
     return (
         <Tabs
             screenOptions={{
@@ -121,3 +148,4 @@ const styles = StyleSheet.create({
         borderColor: '#F59E0B',
     },
 });
+
