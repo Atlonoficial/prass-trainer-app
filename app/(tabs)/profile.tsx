@@ -1,5 +1,5 @@
 // app/(tabs)/profile.tsx - Tela de Perfil com dados reais
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { useRef, useEffect } from 'react';
 import { Animated } from 'react-native';
 import { Feather } from '@expo/vector-icons';
@@ -30,30 +30,21 @@ export default function ProfileScreen() {
         ? new Date(user.created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
         : 'Membro';
 
-    const handleLogout = () => {
-        console.log('🚪 handleLogout chamado');
-        Alert.alert(
-            'Sair da conta',
-            'Tem certeza que deseja sair?',
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Sair',
-                    style: 'destructive',
-                    onPress: () => {
-                        console.log('🔄 Iniciando logout...');
+    const handleLogout = async () => {
+        console.log('🚪 handleLogout chamado - fazendo logout direto');
 
-                        // 1. Navegar IMEDIATAMENTE para login (não esperar o signOut)
-                        router.replace('/(auth)/login');
+        try {
+            // Fazer signOut PRIMEIRO
+            console.log('🔄 Chamando signOut...');
+            await signOut();
+            console.log('✅ signOut completado');
+        } catch (err) {
+            console.error('❌ Erro no signOut:', err);
+        }
 
-                        // 2. Fazer signOut em background (não bloqueia a navegação)
-                        signOut()
-                            .then(() => console.log('✅ signOut completado'))
-                            .catch((err) => console.warn('⚠️ signOut erro:', err));
-                    },
-                },
-            ]
-        );
+        // Navegar para login (vai acontecer de qualquer forma)
+        console.log('🔀 Navegando para login...');
+        router.replace('/(auth)/login');
     };
 
     const menuItems = [
