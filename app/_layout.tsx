@@ -5,6 +5,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import * as SplashScreen from 'expo-splash-screen';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 // Manter splash screen visível enquanto carrega
 SplashScreen.preventAutoHideAsync();
@@ -32,18 +33,21 @@ export default function RootLayout() {
     }, []);
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-            <Stack
-                screenOptions={{
-                    headerShown: false,
-                    animation: 'slide_from_right',
-                }}
-            >
-                <Stack.Screen name="index" />
-                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-        </QueryClientProvider>
+        <AuthProvider>
+            <QueryClientProvider client={queryClient}>
+                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                <Stack
+                    screenOptions={{
+                        headerShown: false,
+                        animation: 'slide_from_right',
+                    }}
+                >
+                    <Stack.Screen name="index" />
+                    <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                </Stack>
+            </QueryClientProvider>
+        </AuthProvider>
     );
 }
+
