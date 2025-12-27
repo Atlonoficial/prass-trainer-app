@@ -3,6 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
+// A chave de armazenamento que o Supabase usa (derivada do URL do projeto)
+const SUPABASE_AUTH_KEY = 'sb-vrzmfhwzoeutokzyypwv-auth-token';
+
 // Armazenamento seguro para tokens
 const ExpoSecureStoreAdapter = {
     getItem: async (key: string): Promise<string | null> => {
@@ -40,4 +43,49 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     },
 });
 
+// Função para limpar completamente o storage de autenticação
+export const clearAuthStorage = async (): Promise<void> => {
+    console.log('🗑️ Limpando storage de autenticação...');
+    try {
+        if (Platform.OS === 'web') {
+            // Limpar todas as chaves relacionadas ao Supabase no localStorage
+            const keysToRemove = Object.keys(localStorage).filter(key =>
+                key.includes('supabase') || key.includes('sb-')
+            );
+            keysToRemove.forEach(key => {
+                console.log(`  Removendo: ${key}`);
+                localStorage.removeItem(key);
+            });
+            console.log(`🗑️ Removidas ${keysToRemove.length} chaves do localStorage`);
+        } else {
+            // Limpar SecureStore no mobile
+            try {
+                await SecureStore.deleteItemAsync(SUPABASE_AUTH_KEY);
+                console.log(`🗑️ Removida chave: ${SUPABASE_AUTH_KEY}`);
+            } catch (e) {
+                console.log(`⚠️ Chave não encontrada: ${SUPABASE_AUTH_KEY}`);
+            }
+
+            // Tentar limpar outras chaves possíveis
+            const extraKeys = [
+                'supabase-auth-token',
+                'supabase.auth.token',
+                'sb-auth-token'
+            ];
+            for (const key of extraKeys) {
+                try {
+                    await SecureStore.deleteItemAsync(key);
+                    console.log(`🗑️ Removida chave extra: ${key}`);
+                } catch (e) {
+                    // Ignora se não existir
+                }
+            }
+        }
+        console.log('✅ Storage de autenticação limpo!');
+    } catch (error) {
+        console.error('❌ Erro ao limpar storage:', error);
+    }
+};
+
 export default supabase;
+

@@ -2,7 +2,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Session, User } from '@supabase/supabase-js';
-import { Platform } from 'react-native';
 
 interface AuthState {
     user: User | null;
@@ -90,76 +89,40 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signOut = useCallback(async () => {
         console.log('🔓 Iniciando signOut no AuthContext...');
+
+        // 1. FORÇAR o estado como deslogado IMEDIATAMENTE (antes de tudo!)
+        console.log('🔄 Forçando estado como deslogado...');
+        setAuthState({
+            user: null,
+            session: null,
+            isLoading: false,
+            isAuthenticated: false,
+        });
+
+        // 2. Usar a função centralizada de limpeza do storage
+        const { clearAuthStorage } = await import('@/lib/supabase');
+        await clearAuthStorage();
+
+        // 3. Remover canais de realtime
         try {
-            // 1. Limpar tokens do storage ANTES do signOut
-            try {
-                if (Platform.OS === 'web') {
-                    const keysToRemove = Object.keys(localStorage).filter(key =>
-                        key.includes('supabase') || key.includes('sb-')
-                    );
-                    keysToRemove.forEach(key => localStorage.removeItem(key));
-                    console.log(`🗑️ Limpas ${keysToRemove.length} chaves do localStorage`);
-                } else {
-                    const SecureStore = await import('expo-secure-store');
-                    const keysToTry = [
-                        'supabase-auth-token',
-                        'sb-auth-token',
-                        'supabase.auth.token',
-                        'sb-vrzmfhwzoeutokzyypwv-auth-token',
-                        'supabase.auth.refreshToken',
-                        'supabase.auth.accessToken'
-                    ];
-                    for (const key of keysToTry) {
-                        try {
-                            await SecureStore.deleteItemAsync(key);
-                        } catch (e) {
-                            // Ignora se a chave não existir
-                        }
-                    }
-                    console.log('🗑️ SecureStore limpo');
-                }
-            } catch (storageError) {
-                console.warn('⚠️ Erro ao limpar storage:', storageError);
+            const channels = supabase.getChannels();
+            for (const channel of channels) {
+                await supabase.removeChannel(channel);
             }
-
-            // 2. Remover canais de realtime
-            try {
-                const channels = supabase.getChannels();
-                for (const channel of channels) {
-                    await supabase.removeChannel(channel);
-                }
-                console.log(`📡 Removidos ${channels.length} canais realtime`);
-            } catch (e) {
-                console.warn('⚠️ Erro ao remover canais:', e);
-            }
-
-            // 3. Fazer signOut no Supabase
-            try {
-                await supabase.auth.signOut({ scope: 'local' });
-            } catch (e) {
-                console.warn('⚠️ Erro no signOut:', e);
-            }
-
-            // 4. FORÇAR o estado como deslogado IMEDIATAMENTE
-            console.log('🔄 Forçando estado como deslogado...');
-            setAuthState({
-                user: null,
-                session: null,
-                isLoading: false,
-                isAuthenticated: false,
-            });
-
-            console.log('✅ SignOut completado com sucesso');
-        } catch (error) {
-            console.error('❌ Erro no signOut:', error);
-            // Mesmo com erro, forçar estado como deslogado
-            setAuthState({
-                user: null,
-                session: null,
-                isLoading: false,
-                isAuthenticated: false,
-            });
+            console.log(`📡 Removidos ${channels.length} canais realtime`);
+        } catch (e) {
+            console.warn('⚠️ Erro ao remover canais:', e);
         }
+
+        // 4. Fazer signOut no Supabase (pode falhar, mas o storage já foi limpo)
+        try {
+            await supabase.auth.signOut({ scope: 'local' });
+            console.log('✅ SignOut Supabase completado');
+        } catch (e) {
+            console.warn('⚠️ Erro no signOut Supabase (ignorando):', e);
+        }
+
+        console.log('✅ SignOut completado com sucesso');
     }, []);
 
     const resetPassword = useCallback(async (email: string) => {
