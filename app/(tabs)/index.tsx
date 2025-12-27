@@ -57,6 +57,34 @@ export default function DashboardScreen() {
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
+            {/* Header Fixo */}
+            <View style={styles.fixedHeader}>
+                {/* Espaço vazio para balancear o botão de notificação */}
+                <View style={styles.headerSpacer} />
+
+                {/* Logo Centralizada */}
+                <Image
+                    source={require('../../assets/logo.png')}
+                    style={styles.headerLogo}
+                    resizeMode="contain"
+                />
+
+                {/* Botão de Notificação */}
+                <TouchableOpacity
+                    style={styles.notificationButton}
+                    onPress={() => router.push('/notifications')}
+                >
+                    <Feather name="bell" size={22} color={Colors.dark.text} />
+                    {unreadCount > 0 && (
+                        <View style={styles.notificationBadge}>
+                            <Text style={styles.notificationBadgeText}>
+                                {unreadCount > 9 ? '9+' : unreadCount}
+                            </Text>
+                        </View>
+                    )}
+                </TouchableOpacity>
+            </View>
+
             <ScrollView
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollContent}
@@ -69,28 +97,6 @@ export default function DashboardScreen() {
                     />
                 }
             >
-                {/* Header */}
-                <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
-                    <Image
-                        source={require('../../assets/logo.png')}
-                        style={styles.headerLogo}
-                        resizeMode="contain"
-                    />
-                    <TouchableOpacity
-                        style={styles.notificationButton}
-                        onPress={() => router.push('/notifications')}
-                    >
-                        <Feather name="bell" size={22} color={Colors.dark.text} />
-                        {unreadCount > 0 && (
-                            <View style={styles.notificationBadge}>
-                                <Text style={styles.notificationBadgeText}>
-                                    {unreadCount > 9 ? '9+' : unreadCount}
-                                </Text>
-                            </View>
-                        )}
-                    </TouchableOpacity>
-                </Animated.View>
-
                 {/* Data */}
                 <View style={styles.dateContainer}>
                     <Feather name="calendar" size={16} color={Colors.dark.textSecondary} />
@@ -278,22 +284,31 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.dark.background,
     },
+    fixedHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        backgroundColor: Colors.dark.background,
+        borderBottomWidth: 1,
+        borderBottomColor: 'rgba(255, 255, 255, 0.05)',
+    },
+    headerSpacer: {
+        width: 40,
+        height: 40,
+    },
     scrollView: {
         flex: 1,
     },
     scrollContent: {
         paddingBottom: 32,
         paddingHorizontal: 16,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingVertical: 8,
+        paddingTop: 12,
     },
     headerLogo: {
-        width: 140,
-        height: 55,
+        width: 120,
+        height: 50,
     },
     notificationButton: {
         width: 40,
