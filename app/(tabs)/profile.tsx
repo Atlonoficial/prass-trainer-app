@@ -45,12 +45,19 @@ export default function ProfileScreen() {
                         try {
                             await signOut();
                             console.log('✅ signOut executado com sucesso');
-                            // Redirecionar para o index que vai verificar o estado
-                            router.replace('/');
+
+                            // Navegar diretamente para a tela de login
+                            router.replace('/(auth)/login');
+
+                            // Fallback: forçar recarga após delay se ainda estiver logado
+                            setTimeout(() => {
+                                console.log('⏱️ Fallback: Tentando redirecionar novamente...');
+                                router.replace('/(auth)/login');
+                            }, 500);
                         } catch (error: any) {
                             console.error('❌ Erro ao sair:', error);
-                            // Mesmo com erro, tentar redirecionar
-                            router.replace('/');
+                            // Mesmo com erro, forçar redirecionamento para login
+                            router.replace('/(auth)/login');
                         }
                     },
                 },
