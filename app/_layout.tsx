@@ -4,6 +4,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useColorScheme } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from '@/contexts/AuthContext';
 
@@ -33,21 +34,22 @@ export default function RootLayout() {
     }, []);
 
     return (
-        <AuthProvider>
-            <QueryClientProvider client={queryClient}>
-                <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        animation: 'slide_from_right',
-                    }}
-                >
-                    <Stack.Screen name="index" />
-                    <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-                    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-                </Stack>
-            </QueryClientProvider>
-        </AuthProvider>
+        <SafeAreaProvider>
+            <AuthProvider>
+                <QueryClientProvider client={queryClient}>
+                    <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+                    <Stack
+                        screenOptions={{
+                            headerShown: false,
+                            animation: 'slide_from_right',
+                        }}
+                    >
+                        <Stack.Screen name="index" />
+                        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                    </Stack>
+                </QueryClientProvider>
+            </AuthProvider>
+        </SafeAreaProvider>
     );
 }
-
