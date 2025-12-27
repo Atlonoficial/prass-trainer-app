@@ -40,25 +40,16 @@ export default function ProfileScreen() {
                 {
                     text: 'Sair',
                     style: 'destructive',
-                    onPress: async () => {
+                    onPress: () => {
                         console.log('🔄 Iniciando logout...');
-                        try {
-                            await signOut();
-                            console.log('✅ signOut executado com sucesso');
 
-                            // Navegar diretamente para a tela de login
-                            router.replace('/(auth)/login');
+                        // 1. Navegar IMEDIATAMENTE para login (não esperar o signOut)
+                        router.replace('/(auth)/login');
 
-                            // Fallback: forçar recarga após delay se ainda estiver logado
-                            setTimeout(() => {
-                                console.log('⏱️ Fallback: Tentando redirecionar novamente...');
-                                router.replace('/(auth)/login');
-                            }, 500);
-                        } catch (error: any) {
-                            console.error('❌ Erro ao sair:', error);
-                            // Mesmo com erro, forçar redirecionamento para login
-                            router.replace('/(auth)/login');
-                        }
+                        // 2. Fazer signOut em background (não bloqueia a navegação)
+                        signOut()
+                            .then(() => console.log('✅ signOut completado'))
+                            .catch((err) => console.warn('⚠️ signOut erro:', err));
                     },
                 },
             ]
