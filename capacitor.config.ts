@@ -5,8 +5,10 @@ const config: CapacitorConfig = {
   appName: 'Prass Trainer',
   webDir: 'dist',
   ios: {
-    contentInset: 'automatic',
-    allowsLinkPreview: false
+    contentInset: 'always',
+    allowsLinkPreview: false,
+    preferredContentMode: 'mobile',
+    scrollEnabled: true
   },
   server: {
     iosScheme: 'capacitor',
@@ -17,9 +19,12 @@ const config: CapacitorConfig = {
       launchAutoHide: true,
       backgroundColor: '#000000',
       showSpinner: false
+    },
+    StatusBar: {
+      style: 'dark',
+      backgroundColor: '#000000'
     }
   }
 };
 
 export default config;
-
